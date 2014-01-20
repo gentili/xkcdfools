@@ -595,9 +595,11 @@ $(document).ready(function() {
 			if (data) {
 				xkcd.latest = data;
 				$('#screen').one('cli-ready', function(e) {
-					Terminal.runCommand('cat welcome.txt');
+					// Nothing to see here...
 				});
-				Terminal.runCommand('display '+xkcd.latest.num+'/'+pathFilename(xkcd.latest.img));
+				// Terminal.runCommand('display '+xkcd.latest.num+'/'+pathFilename(xkcd.latest.img));
+				Terminal.promptActive = true;
+				// noData();
 			} else {
 				noData();
 			}
