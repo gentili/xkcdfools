@@ -37,7 +37,6 @@
   		
   		var screen = document.createElement( 'div' );
   		screen.id = 'screen';
-  		screen.style.backgroundColor = 'rgba(0,127,127,0.75)';
   		screen.innerHTML = ' \
 		  <div id="display"> \
 		    <div id="welcome"> \
@@ -50,12 +49,16 @@
 		  </div> \
 		  <div id="bottomline"> \
 		    <span id="inputline"><span id="prompt"></span><span id="lcommand"></span><span id="cursor" >&nbsp;</span><span id="rcommand"></span></span><span id="spinner"></span> \
-		  </div>';
+		  </div> \
+		  <div id="indicators"><span id="alt-indicator">Alt-</span><span id="ctrl-indicator">Ctrl-</span> <span id="scroll-indicator">SCR LOCK</span></div> \
+		';
 
   		object = new THREE.CSS3DObject(screen);
   		object.position.x = 0;
   		object.position.y = 0;
   		object.position.z = 0;
+  		// var vector = new THREE.Vector3(1.0, 1.0, 1.0);
+  		// object.lookAt( vector );
   		scene.add( object );
   		
   		renderer = new THREE.CSS3DRenderer();
@@ -74,29 +77,13 @@
   	
   	function render() {
   		requestAnimationFrame(render);
+  		object.rotation.y += 0.01;
   		renderer.render(scene, camera);
   	}
   	render();
   	
   </script>
-  <!-- 
   <div id="pagealert" title="Press any key for next page of text"> --More-- </div>
-  <div id="indicators"><span id="alt-indicator">Alt-</span><span id="ctrl-indicator">Ctrl-</span> <span id="scroll-indicator">SCR LOCK</span></div>
-  <div id="screen">
-   <div id="display">
-    <div id="welcome">
-      <h1>DEMURRAGE V1.0</h1>
-      <h2>System startup in progress...</h2>
-    </div>
-    <noscript>
-      <p>Sorry, the CLI requires JavaScript to work. Please turn on JavaScript, or try the <a href="/1/">GUI Interface</a>.</p>
-    </noscript>
-   </div>
-   <div id="bottomline">
-    <span id="inputline"><span id="prompt"></span><span id="lcommand"></span><span id="cursor" >&nbsp;</span><span id="rcommand"></span></span><span id="spinner"></span>
-   </div>
-  </div>
-   -->
   <div id="credit">Copyright <a href="http://mcpnet.ca/">Master Control Productions</a>. Original CLI2 by <a href="http://thrind.xamai.ca">Rod McFarland</a>.</div>
  </body>
 </html>

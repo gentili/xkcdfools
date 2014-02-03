@@ -411,6 +411,29 @@ var Terminal = {
 		this.jumpToBottom();
 	},
 	
+	slowPrint: function() {
+		this.promptActive = false;
+		var av = Array.prototype.slice.call(arguments, 0);
+		var p = $('<p>');
+		$('#display').append(p);
+
+		var index = 0;
+		
+		var text = av.join('');
+		
+		var interval = window.setInterval($.proxy(function typeCharacter() {
+			if (index < text.length) {
+				p.append(text.charAt(index));
+				index += 1;
+			} else {
+				clearInterval(interval);
+				this.promptActive = true;
+				$('#screen').triggerHandler('cli-ready');
+				this.jumpToBottom();
+			}
+		}, this), this.config.typingSpeed);
+	},
+
 	processInputBuffer: function(cmd) {
 		this.print($('<p>').addClass('command').text(this.config.prompt + this.buffer));
 		var cmd = trim(this.buffer);
