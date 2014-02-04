@@ -411,25 +411,20 @@ var Terminal = {
 		this.jumpToBottom();
 	},
 	
-	slowPrint: function() {
-		this.promptActive = false;
-		var av = Array.prototype.slice.call(arguments, 0);
+	slowPrint: function(text, callback) {
 		var p = $('<p>');
 		$('#display').append(p);
-
 		var index = 0;
-		
-		var text = av.join('');
-		
+				
 		var interval = window.setInterval($.proxy(function typeCharacter() {
 			if (index < text.length) {
 				p.append(text.charAt(index));
 				index += 1;
 			} else {
 				clearInterval(interval);
-				this.promptActive = true;
-				$('#screen').triggerHandler('cli-ready');
 				this.jumpToBottom();
+				if (callback) 
+					callback();
 			}
 		}, this), this.config.typingSpeed);
 	},
@@ -459,7 +454,7 @@ var Terminal = {
 			$('#display .command:last-child').add('#bottomline').first().append($('#spinner'));
 			this._spinnerTimeout = window.setInterval($.proxy(function() {
 				if (!$('#spinner').is(':visible')) {
-					$('#spinner').fadeIn();
+					$('#spinner').show();
 				}
 				this.spinnerIndex = (this.spinnerIndex + 1) % this.config.spinnerCharacters.length;
 				$('#spinner').text(this.config.spinnerCharacters[this.spinnerIndex]);
@@ -469,8 +464,8 @@ var Terminal = {
 		} else if (!working && this._spinnerTimeout) {
 			clearInterval(this._spinnerTimeout);
 			this._spinnerTimeout = null;
-			$('#spinner').fadeOut();
-			this.setPromptActive(true);
+			$('#spinner').hide();
+			// this.setPromptActive(true);
 			$('#screen').triggerHandler('cli-ready');
 		}
 	},

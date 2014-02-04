@@ -9,19 +9,26 @@ TerminalShell.commands['quit'] = function(terminal) {
 $(document).ready(function() {
 	Terminal.promptActive = false;
 	Terminal.config.typingSpeed = 10;
-	var state = 0;
-	function noData() {
-		Terminal.setPromptActive(false);
-		Terminal.slowPrint("Starting the state count");
-	}
+	Terminal.config.spinnerCharacters = ['[-]','[\\]','[|]','[/]'];
+	Terminal.config.spinnerSpeed = 30,
+	
 	$('#screen').bind('cli-load', function(e) {
-		noData();
-	});	
-	$('#screen').bind('cli-ready', function(e) {
-		if (state < 10) {
-			Terminal.slowPrint("Current State "+state++);			
-		} else {
-			Terminal.setPromptActive(true);
-		}
+		Terminal.setPromptActive(false);
+		Terminal.slowPrint("Booting MCP Kernel V1.0.1\n",
+				function() { Terminal.setWorking(true); window.setTimeout(boot, 1000);});
 	});
+
+	function boot() {
+		Terminal.setWorking(false);
+		Terminal.slowPrint(
+			"System Resource Hash: # AF23 4E2E 384B EE25\n"+
+			"Terminal Mode: ASCII\n"+
+			"Connecting to system network",
+			function() { Terminal.setWorking(true); window.setTimeout(done, 1000);});
+	}
+	
+	function done() {
+		Terminal.setWorking(false);
+		Terminal.setPromptActive(true);
+	}	
 });
