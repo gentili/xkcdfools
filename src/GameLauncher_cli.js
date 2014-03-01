@@ -15,31 +15,73 @@ $(document).ready(function() {
 	$('#screen').bind('cli-load', function(e) {
 		Terminal.setPromptActive(false);
 		Terminal.slowPrint("Booting MCP Kernel V1.0.1\n",
-				function() { Terminal.setWorking(true); window.setTimeout(boot, 500);});
+				function() { Terminal.setWorking(true); window.setTimeout(starthazard, 500);});
 	});
 
-	var $hazard = $('<div class="hazard">');
 	function boot() {
 		Terminal.setWorking(false);
 		Terminal.slowPrint(
-			"System Resource Hash: # AF23 4E2E 384B EE25\n"+
-			"Terminal Mode: ASCII\n"+
-			"Connecting to system network",
-			function() { Terminal.setWorking(true); window.setTimeout(hazard, 500);});
+			""+
+			"Connecting to system network\n"+
+			"System Resource Hash: # AF23 4E2E 384B EE25"+
+			"",
+			function() { Terminal.setWorking(true); window.setTimeout(starthazard, 500);});
 	}
 	
-	function hazard() {
-		Terminal.setWorking(false);
+	var $hazard = $('<div class="hazard">');
+	var curhazard = 0;
+	var hazardlist = [
+	               {
+	            	   "filename" : "DimentionalTransferWarning.svg",
+	            	   "warning" : "WARNING: Antimatter power feed",
+	               },
+	               {
+	            	   "filename" : "DimentionalTransferWarning.svg",
+	            	   "warning" : "WARNING: Artificial black hole generated",
+	               },
+	               {
+	            	   "filename" : "DimentionalTransferWarning.svg",
+	            	   "warning" : "WARNING: Strange matter injector",
+	               },
+	               {
+	            	   "filename" : "DimentionalTransferWarning.svg",
+	            	   "warning" : "WARNING: Dimensional interface generated",
+	               },
+	               {
+	            	   "filename" : "DimentionalTransferWarning.svg",
+	            	   "warning" : "WARNING: Dimensional Transfer Engine Engaged",
+	               },
+	               ];
+	
+	function starthazard() {
+		Terminal.clear();
 		Terminal.print ($hazard);
-		jQuery.get('DimentionalTransferWarning.svg',function(data) {
-			var $svg = $(data);
-			$svg.find('path').css("stroke","#1f1");
-			$svg.fadeIn(1000);
-			$hazard.append($svg);
-		},"http");
-		window.setTimeout(hazard, 2000);
+		jQuery.get(hazardlist[curhazard].filename, processhazard ,"http");
 	}
 	
+	function processhazard(data) {
+		var $svg = $(data);
+		$svg.find('path').css("stroke","#1f1");
+		$svg.css("display","none");
+		$hazard.append($svg);
+		hazardlist[curhazard]['svg'] = $svg;
+		curhazard = curhazard + 1;
+		if (curhazard < hazardlist.length) {
+			jQuery.get(hazardlist[curhazard].filename, processhazard ,"http");
+		} else {
+			curhazard = 0;
+			showhazard();
+		}
+	}
+	
+	function showhazard() {
+		if (curhazard >= hazardlist.length) {
+			done();
+		}
+		hazardlist[curhazard].svg.fadeIn();
+		Terminal.slowPrint(hazardlist[curhazard].warning, function() {window.setTimeout(showhazard,250);});
+		curhazard = curhazard + 1;
+	}
 	
 	function done() {
 		Terminal.setWorking(false);
