@@ -40,31 +40,22 @@
 	
 			// External geometry
 			
-			/*
+			var mesh;
 			var loader = new THREE.JSONLoader();
-			loader.load("blendertest.js", createSkinnedMesh);
-			var skinnedMesh;
-			function createSkinnedMesh(geometry, materials) {
-				skinnedMesh = new THREE.SkinnedMesh(geometry, 
-						new THREE.MeshFaceMaterial(materials));
-				enableSkinning(skinnedMesh);
-			}
-			
-			function enableSkinning(skinnedMesh) {
-				var materials = skinnedMesh.material.materials;
-				for (var i = 0,length = materials.length; i < length; i++) {
-					var mat = materials[i];
-					mat.skinning = true;
-				}
-			}
-			scene.add(skinnedMesh);
-			*/
+			loader.load("test_mesh_import.js", function(geometry, materials) {
+				var faceMaterial = new THREE.MeshFaceMaterial( materials );
+				mesh = new THREE.MorphAnimMesh( geometry, faceMaterial );
+				scene.add(mesh);
+			});
 			
 			var render = function () {
 				requestAnimationFrame(render);
 	
 				cube.rotation.x += 0.01;
 				cube.rotation.y += 0.01;
+				
+				mesh.rotation.x += 0.01;
+				mesh.rotation.y += 0.01;
 	
 				renderer.render(scene, camera);
 			};
